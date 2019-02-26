@@ -28,6 +28,8 @@ namespace Prs.Modles
         public bool IsReviwer { get; set; } = false;
         public bool IsAdmin { get; set; } = false;
         public bool Active { get; set; } = true;
+        //public object Username { get; internal set; }
+
         public User () { }
 }
 

@@ -14,11 +14,10 @@ namespace Prs_Server.Controllers
     public class UsersController : ControllerBase
     {
         private readonly PrsDbContext _context;
-        //UsersController controller tells us what kind of controller is.. line #18
+
         public UsersController(PrsDbContext context)
         {
             _context = context;
-            //_cotexr is just a variable name line 18 -21 is just a constractor.
         }
 
         // GET: api/Users
@@ -26,16 +25,14 @@ namespace Prs_Server.Controllers
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
-        } /*return await returns all methods*/
-        
+        }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            //FindAsync is a way to retrive by primary key
+
             if (user == null)
             {
                 return NotFound();
@@ -43,12 +40,11 @@ namespace Prs_Server.Controllers
 
             return user;
         }
-        //Get is used when u read data.
+
         // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
-            //PutUser is one of http method. its for update data.get is for reading data.post is ToString update.delete is ToString remove data
             if (id != user.Id)
             {
                 return BadRequest();
@@ -104,6 +100,22 @@ namespace Prs_Server.Controllers
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
+        }
+
+
+        [HttpGet("/api/users/auth/{username}/{password}")]
+        public async Task<ActionResult<User>> GetAuthenticate(string username, string password)
+        {
+            var user = await _context.Users
+                .SingleOrDefaultAsync(u => u.UserName.ToLower().Equals(username.ToLower())
+                && u.Password.Equals(password));
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+
         }
     }
 }

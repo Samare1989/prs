@@ -29,7 +29,12 @@ namespace Prs_Server
             var connStr = @"server=localhost\sqlexpress;" +
                 "database=PrsDb3;" +
                 "trusted_connection=true;";
-            services.AddDbContext<PrsDbContext>(opt => opt.UseSqlServer(connStr));
+
+            services.AddDbContext<PrsDbContext>(opt =>
+            {
+                opt.UseLazyLoadingProxies();
+                opt.UseSqlServer(connStr);
+            });
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
