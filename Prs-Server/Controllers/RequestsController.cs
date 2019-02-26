@@ -34,45 +34,56 @@ namespace Prs_Server.Controllers
                 if(request.Total <= 50)
             {
                 request.Status = "Approved";
+
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
 
 
                request.Status = " Rejected";
+
                 await _context.SaveChangesAsync();
                 return NoContent();
         }
-         
-   
-            // below is to determin if the purchase request is appproved or rejected.
 
-        [HttpPut("/api/Requests/approved/{id}")]
-        public async Task<IActionResult> PutRequestApproved(int Id)
+
+        // below is to determin if the purchase request is appproved or rejected.
+
+        //approved button
+        [HttpPut("/api/Requests/Approved/{id}")]
+        public async Task<IActionResult> PutRequestApproved(int id)
         {
-            Request.Status = "Approved";
-            await _context.SaveChangesAsync();
-            return NoContent(); 
-        }
+            var request = await _context.Requests.FindAsync(id);
 
+            if (request == null)
+            {
+                return NotFound();
+            }
+                
+            request.Status = "APPROVED";
 
-        [HttpPut("/api/Requests/rejected/{id}")]
-        public async Task <IActionResult> PutRequestReject(int Id)
-        {
-            Request.Status = "rejected";
             await _context.SaveChangesAsync();
             return NoContent();
+
         }
 
+        [HttpPut("/api/Requests/rejected/{id}")]
+        public async Task<IActionResult> PutRequestrejected(int id)
+        {
+            var request = await _context.Requests.FindAsync(id);
 
+            if (request == null)
+            {
+                return NotFound();
+            }
 
+            request.Status = "rejected";
 
+            await _context.SaveChangesAsync();
+            return NoContent();
 
-
-
-
-
-
+        }
+        
         // GET: api/Requests
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Request>>> GetRequests()
@@ -156,5 +167,4 @@ namespace Prs_Server.Controllers
         }
     }
 }
-
 
